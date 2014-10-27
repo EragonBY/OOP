@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 require 'rubygame'
 include Rubygame
 
@@ -71,7 +71,7 @@ end
 
 load 'base_figures.rb'
 load 'quadrangles.rb'
-load 'elliptic.rb'
+#load 'elliptic.rb'
 
 editor = Editor.new
 main_thread = Thread.new{ editor.run }
@@ -83,8 +83,9 @@ until (input = $stdin.readline) == "exit\n"
     Editor.available_figures_list.each { |figure_name| puts figure_name }
   when 'help'
     puts 'list  -  list of available figures'
-    puts 'add  -  add the figure'
+    puts 'add   -  add the figure'
     puts 'exit  -  quit the program'
+    puts 'load  -  load new module'
   when 'add'
     puts 'type figure name'
     if Editor.available_figures_list.include? (fig = $stdin.readline.strip.to_sym)
@@ -92,6 +93,19 @@ until (input = $stdin.readline) == "exit\n"
     else
       puts 'no such figure'
     end
+  when 'load'
+    puts 'type path to module'
+    if File.exists?(path = $stdin.readline.strip)
+      begin
+        load path
+      rescue
+        puts 'invalid module'
+      end
+    else
+      puts 'no such file'
+    end
+  else
+    puts 'unknown command'
   end
   print '>>'  
 end
